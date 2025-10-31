@@ -42,12 +42,11 @@ npm run watch
 npm install --legacy-peer-deps
 
 ## stage the changed files (prefer explicit path rather than `.`)
-git add drawing-xblock-react/setup.py
-# add any other files you intentionally changed (changelog, README, etc.)
-git add drawing-xblock-react/CHANGELOG.rst
+# git add drawing-xblock-react/setup.py
+git add .
 
-git commit -m "Bump drawing-xblock-react to V2.0.0" \
- && git tag -a V2.0.0 -m "Release V2.0.0" \
+git commit -m "Bump drawing-xblock-react to V1.0.0" \
+ && git tag -a V1.0.0 -m "Release V1.0.0" \
  && git push origin main --follow-tags
 
 
