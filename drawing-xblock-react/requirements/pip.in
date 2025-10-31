@@ -5,3 +5,5 @@
 pip
 setuptools
 wheel
+
+lazy==1.6
