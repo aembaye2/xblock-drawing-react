@@ -21,8 +21,7 @@ fi
 # 3. Activate virtual environment
 echo "🔧 Activating virtual environment..."
 source xblock-env/bin/activate
-# mkdir var
-
+mkdir var
 # 4. Upgrade pip
 echo "📦 Upgrading pip..."
 pip install --upgrade pip
@@ -46,12 +45,84 @@ else
 fi
 
 
-if [ -d "xblock-drawing-react" ]; then
-    echo "  - Installing xblock-drawing-react ..."
-    pip install -e ./xblock-drawing-react
+if [ -d "xblock-dragdrop2" ]; then
+    echo "  - Installing dragdrop2 XBlock..."
+    pip install -e ./xblock-dragdrop2
+else
+    echo "  ⚠️  Warning: xblock-dragdrop2 directory not found"
+fi
+
+
+if [ -d "drawing-xblock-react" ]; then
+    echo "  - Installing drawing-xblock-react ..."
+    pip install -e ./drawing-xblock-react
 else
     echo "  ⚠️  Warning: drawing-xblock-react directory not found"
 fi
+
+# if [ -d "xblock-vectordraw2" ]; then
+#     echo "  - Installing xblock-vectordraw2..."
+#     pip install -e ./xblock-vectordraw2
+# else
+#     echo "  ⚠️  Warning: xblock-vectordraw2 directory not found"
+# fi
+
+if [ -d "xblock-vectordraw3" ]; then
+    echo "  - Installing xblock-vectordraw3..."
+    pip install -e ./xblock-vectordraw3
+else
+    echo "  ⚠️  Warning: xblock-vectordraw3 directory not found"
+fi
+
+if [ -d "xblock-mcqs" ]; then
+    echo "  - Installing xblock-mcqs..."
+    pip install -e ./xblock-mcqs
+else
+    echo "  ⚠️  Warning: xblock-mcqs directory not found"
+fi
+
+if [ -d "xblock-sortable2" ]; then
+    echo "  - Installing xblock-sortable2..."
+    pip install -e ./xblock-sortable2
+else
+    echo "  ⚠️  Warning: xblock-sortable directory not found"
+fi
+
+if [ -d "xblock-sortable4" ]; then
+    echo "  - Installing xblock-sortable4..."
+    pip install -e ./xblock-sortable4
+else
+    echo "  ⚠️  Warning: xblock-sortable directory not found"
+fi
+
+# if [ -d "formula_excercise_block" ]; then
+#     echo "  - Installing formula_excercise_block..."
+#     pip install -e ./formula_excercise_block
+# else
+#     echo "  ⚠️  Warning: formula_excercise_block directory not found"
+# fi
+
+if [ -d "xblock-react" ]; then
+    echo "  - Installing xblock-react..."
+    pip install -e ./xblock-react
+else
+    echo "  ⚠️  Warning: xblock-react directory not found"
+fi
+
+if [ -d "xblock-myxblock-react" ]; then
+    echo "  - Installing xblock-myxblock-react ..."
+    pip install -e ./xblock-myxblock-react
+else
+    echo "  ⚠️  Warning: xblock-myxblock directory not found"
+fi
+
+if [ -d "openedx-xblock-inline-dropdown" ]; then
+    echo "  - openedx-xblock-inline-dropdown ..."
+    pip install -e ./openedx-xblock-inline-dropdown
+else
+    echo "  ⚠️  Warning: xblock-myxblock directory not found"
+fi
+
 
 # 7. Run database migrations
 echo "🗄️  Running database migrations..."

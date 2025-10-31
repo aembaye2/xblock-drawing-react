@@ -8,6 +8,8 @@ import { IntlProvider, FormattedMessage } from 'react-intl';
 import { BoundRuntime, type JQueryWrappedDiv, type XBlockRuntime } from './xblock-utils';
 import faMessages from '../lang/compiled/fa.json';
 import frMessages from '../lang/compiled/fr.json';
+import { DrawingApp } from './components/canvas/DrawingApp';
+import { modes } from './components/canvas/modesfile';
 
 const messages = {
   fa: faMessages,
@@ -66,7 +68,7 @@ const StudioView: React.FC<Props> = ({
   const [ch, setCh] = React.useState<number>(propsToNumber(canvasHeight, 400));
   const [scale, setScale] = React.useState<number[]>(scaleFactors ?? [10,20,75,84,25,35]);
   const [bgNumber, setBgNumber] = React.useState<number>(propsToNumber(bgnumber, 0));
-  const [modes, setModes] = React.useState<string[]>(visibleModes ?? []);
+  const [visibleModesState, setVisibleModesState] = React.useState<string[]>(visibleModes ?? []);
   const [axes, setAxes] = React.useState<string[]>(axisLabels ?? []);
   const [hideLbls, setHideLbls] = React.useState<boolean>(hideLabels ?? false);
   const [initialDrawStr, setInitialDrawStr] = React.useState<string>(
@@ -88,7 +90,7 @@ const StudioView: React.FC<Props> = ({
   
   const setModesFromString = (val: string) => {
     const parts = val.split(',').map(s => s.trim()).filter(s => s.length > 0);
-    setModes(parts);
+    setVisibleModesState(parts);
   };
   
   const setAxesFromString = (val: string) => {
@@ -156,7 +158,7 @@ const StudioView: React.FC<Props> = ({
       canvasHeight: ch,
       scaleFactors: scale,
       bgnumber: bgNumber,
-      visibleModes: modes,
+      visibleModes: visibleModesState,
       axisLabels: axes,
       hideLabels: hideLbls,
       // send the serialized JSON string to the backend
@@ -171,11 +173,17 @@ const StudioView: React.FC<Props> = ({
     const savePromise = runtime.postHandler('save_quiz', payload);
     const response = await savePromise;
 
-    if (response && response.initialDrawing) {
-      // Update editor with server-sanitized JSON (pretty-printed)
-      const pretty = JSON.stringify(response.initialDrawing, null, 2);
+    // Update editor with server-sanitized JSON (pretty-printed) if the
+    // handler returned the `initialDrawing` key. Use a property check so
+    // we update even when the value is empty/null (and normalize to an
+    // empty object for the textarea/preview). This avoids leaving the
+    // studio textarea in an "undefined" state when the backend returns
+    // null/None for the field.
+    if (response && Object.prototype.hasOwnProperty.call(response, 'initialDrawing')) {
+      const serverInitial = response.initialDrawing ?? {};
+      const pretty = JSON.stringify(serverInitial, null, 2);
       setInitialDrawStr(pretty);
-      setInitialDraw(response.initialDrawing);
+      setInitialDraw(serverInitial);
     }
 
     // Let the runtime close the editor (pass the original promise)
@@ -342,7 +350,7 @@ const StudioView: React.FC<Props> = ({
         </label>
         <input 
           type="text" 
-          value={modes.join(', ')} 
+          value={visibleModesState.join(', ')} 
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setModesFromString(e.target.value)}
           style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
         />
@@ -397,6 +405,37 @@ const StudioView: React.FC<Props> = ({
         />
         <small style={{ color: '#666', fontSize: '12px' }}>
           Enter valid JSON for initial canvas objects (Fabric.js format)
+        </small>
+      </div>
+
+      {/* Canvas Preview */}
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+          Canvas Preview:
+        </label>
+        <div style={{ 
+          border: '2px solid #007bff', 
+          borderRadius: '4px', 
+          padding: '10px',
+          backgroundColor: '#f8f9fa'
+        }}>
+          <DrawingApp
+            index={idx}
+            AssessName={assessName || 'studio-preview'}
+            canvasWidth={cw}
+            canvasHeight={ch}
+            scaleFactors={scale}
+            submitButtonClicked={false}
+            modes={modes}
+            visibleModes={visibleModesState}
+            bgnumber={bgNumber}
+            axisLabels={axes as [string, string]}
+            initialDrawing={initialDraw}
+            hideLabels={hideLbls}
+          />
+        </div>
+        <small style={{ color: '#666', fontSize: '12px' }}>
+          Live preview of the canvas with current settings and initial drawing
         </small>
       </div>
 
