@@ -407,38 +407,6 @@ const StudioView: React.FC<Props> = ({
           Enter valid JSON for initial canvas objects (Fabric.js format)
         </small>
       </div>
-
-      {/* Canvas Preview */}
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-          Canvas Preview:
-        </label>
-        <div style={{ 
-          border: '2px solid #007bff', 
-          borderRadius: '4px', 
-          padding: '10px',
-          backgroundColor: '#f8f9fa'
-        }}>
-          <DrawingApp
-            index={idx}
-            AssessName={assessName || 'studio-preview'}
-            canvasWidth={cw}
-            canvasHeight={ch}
-            scaleFactors={scale}
-            submitButtonClicked={false}
-            modes={modes}
-            visibleModes={visibleModesState}
-            bgnumber={bgNumber}
-            axisLabels={axes as [string, string]}
-            initialDrawing={initialDraw}
-            hideLabels={hideLbls}
-          />
-        </div>
-        <small style={{ color: '#666', fontSize: '12px' }}>
-          Live preview of the canvas with current settings and initial drawing
-        </small>
-      </div>
-
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginBottom: '15px' }}>
         <div>
           <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
